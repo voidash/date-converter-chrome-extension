@@ -104,7 +104,6 @@ const nepali_years_and_days_in_months = [
     [2100, 31, 32, 31, 32, 30, 31, 30, 29, 30, 29, 30, 30],
 ];
 
-
 function isLeapYear(year) {
     if (year % 4 === 0) {
         return true;
@@ -214,6 +213,60 @@ function checkDateBoundsForAd(year) {
     return year >= 1944 && year <= 2033;
 }
 
+function convertToBS(year, month, day) {
+
+    let english_year = 1944;
+    let english_month = 1;
+    let english_day = 1;
+
+    let initial_date = new Date(1944, 1, 1);
+    let date_given = new Date(year, month, day);
+
+    var del_milliseconds = date_given.getTime() - initial_date.getTime();
+    var days = Math.floor(del_milliseconds / (86400 * 1000));
+    let nepali_year = 2000;
+    let nepali_month = 9;
+    let nepali_day = 17;
+
+    //holds the index of the part
+    let yearIterator = 0;
+    let monthIterator = nepali_month;
+    let dayIterator = nepali_day;
+    while (days >= 0) {
+        let yearPart = nepali_years_and_days_in_months[yearIterator];
+        let monthPart = yearPart[monthIterator];
+        days = days - monthPart;
+
+        if (days >= 0) {
+            monthIterator++;
+        }
+        if (monthIterator > 12) {
+            monthIterator = 1;
+            yearIterator++;
+        }
+    }
+
+    dayIterator += nepali_years_and_days_in_months[yearIterator][monthIterator] + days;
+    if (dayIterator > nepali_years_and_days_in_months[yearIterator][monthIterator]) {
+        monthIterator++;
+        dayIterator -= nepali_years_and_days_in_months[yearIterator][monthIterator];
+    }
+    if (month > 12) {
+        yearIterator++;
+    }
+    console.log(yearIterator + " " + monthIterator + " " + dayIterator);
+
+
+
+}
+
+convertToBS(2001, 03, 10);
+convertToBS(2019, 06, 21);
+convertToBS(2021, 06, 21);
+convertToBS(2022, 06, 21);
+convertToBS(2024, 06, 21);
+convertToBS(2029, 06, 21);
+
 function convertToAD(year, month, day) {
     // known data is that . january 1 1944 is 2000 paush 17
 
@@ -231,8 +284,6 @@ function convertToAD(year, month, day) {
         return calculate();
     }
 
-    const months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    const leap_year_months = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     function calculate() {
         //get to the initial position of 2000/paush/17
@@ -268,4 +319,3 @@ function convertToAD(year, month, day) {
         return initial_date;
     }
 }
-convertToAD(2078, 02, 23);
