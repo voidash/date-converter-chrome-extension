@@ -1,0 +1,12 @@
+{
+    "name": "Nepali DateTime",
+    "description": "convert A.D to B.S and B.S to A.D",
+    "version": "1.0",
+    "manifest_version":3,
+    "background": {
+        "service_worker":"background.js"
+    },
+    "action": {
+        "default_popup": "/popup/popup.html"
+    }
+}
