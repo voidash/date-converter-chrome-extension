@@ -6,6 +6,9 @@ font-size: 20px;
     margin-top:10px;
     padding:2px 15px;
 }
+.todayDate{
+    font-size: large;
+}
 .spacer{
     width:10px;
 }

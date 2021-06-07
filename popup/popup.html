@@ -1,17 +1,29 @@
     <html lang="en">
         <head>
             <link rel="stylesheet" href="style.css" />
+            <script src="/dateConverter/convert.js"></script>
         </head>
         <body>
-            <input type="text" id="date" class="inputBox">
+                <span>Today Date</span>
+                <br>
+                <span class="todayDate"></span>
+            <!--
+            <span>
+                Copy and Paste the Date to Convert
+            </span> -->
+            <div style="margin-top: 30px;">
+            <span>Copy and paste the date to convert</span>
+            </div>
+            <input type="text" id="dateInput" class="inputBox">
             <div class="inline-area">
                 <div>
-                <button class="convertButton">Convert to B.S</button>
+                <button id="convertBS" class="convertButton">Convert to B.S</button>
                 </div>
                 <div class="spacer"></div>
                 <div>
-                <button class="convertButton">Convert to A.D</button>
+                <button id="convertAD" class="convertButton">Convert to A.D</button>
                 </div>
+            </div>
             </div>
             <script src="popup.js"></script>
         </body>

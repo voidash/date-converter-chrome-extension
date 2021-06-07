@@ -123,14 +123,14 @@ function getTodayDate() {
     console.log(date);
     let c = convertToBS(date.getFullYear(), 06, 07);
     console.log(c);
-    return BSinNepali(...c);
+    return BSinEnglish(...c);
 }
 console.log(getTodayDate());
 
 function BSinNepali(year, month, day) {
     year = year + "";
     year = year.split('').map(num => getNumberEquivalentInNepali(num)).join('');
-    month = getMonthInNepali(month / 1);
+    month = getMonthInNepali(month);
     day = (day + "").split('').map(num => getNumberEquivalentInNepali(num)).join('');
 
     return `${year},${month},${day}`;
@@ -138,8 +138,7 @@ function BSinNepali(year, month, day) {
 
 function BSinEnglish(year, month, day) {
     month = getMonthInEnglish(month / 1);
-
-    return `${year},${month},${day}`;
+    return `${year} ${month} ${day}`;
 }
 
 function checkDateBoundsForBS(year, month, day) {
@@ -151,117 +150,118 @@ function checkDateBoundsForBS(year, month, day) {
     }
 }
 
-
-function checkDateBoundsForAd(year, month, day) {
-    return year >= 1944 && year <= 2043 && day <= 4 && month <= 13;
+function checkDateBoundsForAD(year, month, day) {
+    if (year >= 1944 && year < 2043) {
+        return true;
+    }
+    return (year == 2043 && day <= 4 && month <= 13);
 }
 
 function convertToBS(year, month, day) {
+    if (checkDateBoundsForAD(year, month, day)) {
+        let english_year = 1944;
+        let english_month = 1;
+        let english_day = 1;
+        let initial_date = Date.UTC(1944, 1, 1);
+        let date_given = Date.UTC(year, month, day);
 
-    let english_year = 1944;
-    let english_month = 1;
-    let english_day = 1;
+        // var del_milliseconds = date_given.getTime() - initial_date.getTime();
+        // var days = del_milliseconds / (86400 * 1000);
+        let days = Math.abs(initial_date - date_given) / (86400 * 1000);
 
-    let initial_date = Date.UTC(1944, 1, 1);
-    let date_given = Date.UTC(year, month, day);
+        let nepali_year = 2000;
+        let nepali_month = 9;
+        let nepali_day = 17;
 
-    // var del_milliseconds = date_given.getTime() - initial_date.getTime();
-    // var days = del_milliseconds / (86400 * 1000);
-    let days = Math.abs(initial_date - date_given) / (86400 * 1000);
+        //holds the index of the part
+        let yearIterator = 0;
+        let monthIterator = nepali_month;
+        let dayIterator = nepali_day;
+
+        let yearPart = nepali_years_and_days_in_months[yearIterator];
+        while (days >= yearPart[monthIterator]) {
+            yearPart = nepali_years_and_days_in_months[yearIterator];
+            let monthPart = yearPart[monthIterator];
+            days = days - monthPart;
+
+            if (days >= 0) {
+                monthIterator++;
+            }
+            if (monthIterator > 12) {
+                monthIterator = 1 / 1;
+                yearIterator++;
+            }
 
 
-    let nepali_year = 2000;
-    let nepali_month = 9;
-    let nepali_day = 17;
-
-    //holds the index of the part
-    let yearIterator = 0;
-    let monthIterator = nepali_month;
-    let dayIterator = nepali_day;
-
-    let yearPart = nepali_years_and_days_in_months[yearIterator];
-    while (days >= yearPart[monthIterator]) {
-        yearPart = nepali_years_and_days_in_months[yearIterator];
-        let monthPart = yearPart[monthIterator];
-        days = days - monthPart;
-
-        if (days >= 0) {
-            monthIterator++;
         }
-        if (monthIterator > 12) {
-            monthIterator = 1 / 1;
+
+        dayIterator = 17 + days;
+        if (dayIterator > nepali_years_and_days_in_months[yearIterator][monthIterator]) {
+            monthIterator++;
+            dayIterator -= nepali_years_and_days_in_months[yearIterator][monthIterator];
+        }
+
+        if (month > 12) {
             yearIterator++;
         }
 
-
-    }
-
-    dayIterator = 17 + days;
-    if (dayIterator > nepali_years_and_days_in_months[yearIterator][monthIterator]) {
-        monthIterator++;
-        dayIterator -= nepali_years_and_days_in_months[yearIterator][monthIterator];
-    }
-
-    if (month > 12) {
-        yearIterator++;
-    }
-
-    if (yearIterator > 100) {
-        yearIterator -= 100;
-        yearIterator = "21" + yearIterator;
-    } else {
-        yearIterator = "20" + yearIterator;
-    }
-
-    // console.log(yearIterator + " " + monthIterator + " " + dayIterator);
-
-    return [yearIterator / 1, monthIterator, dayIterator];
-}
-
-
-function convertToAD(year, month, day) {
-    // known data is that . january 1 1944 is 2000 paush 17
-
-    let english_year = 1944;
-    let english_month = 1;
-    let english_day = 1;
-    let initial_date = new Date(1944, 1, 1);
-
-    let nepali_year = 2000;
-    let nepali_month = 9;
-    let nepali_day = 17;
-
-    //check if date falls inside our array data.
-    if (checkDateBoundsForBS(year, month, day)) {
-        return calculate();
-    }
-
-
-    function calculate() {
-        //get to the initial position of 2000/paush/17
-        del_days = 0;
-        //array index position
-        aip = (year + "").substr(2, 2) / 1; //convert to string through coersion
-        m = nepali_years_and_days_in_months[aip];
-
-        //array index start from 0
-        for (let i = month - 1; i >= 1; i--) {
-            del_days += m[i];
+        if (yearIterator > 100) {
+            yearIterator -= 100;
+            yearIterator = "21" + yearIterator;
+        } else {
+            yearIterator = "20" + yearIterator;
         }
-        del_days += day - 1;
-        for (let i = aip - 1; i > 0; i--) {
-            m = nepali_years_and_days_in_months[i];
-            for (let j = 1; j < 13; j++) {
-                del_days += m[j];
+
+        // console.log(yearIterator + " " + monthIterator + " " + dayIterator);
+
+        return [yearIterator / 1, monthIterator, dayIterator];
+    }
+
+
+    function convertToAD(year, month, day) {
+        // known data is that . january 1 1944 is 2000 paush 17
+
+        let english_year = 1944;
+        let english_month = 1;
+        let english_day = 1;
+        let initial_date = new Date(1944, 1, 1);
+
+        let nepali_year = 2000;
+        let nepali_month = 9;
+        let nepali_day = 17;
+
+        //check if date falls inside our array data.
+        if (checkDateBoundsForBS(year, month, day)) {
+            return calculate();
+        }
+
+        function calculate() {
+            //get to the initial position of 2000/paush/17
+            del_days = 0;
+            //array index position
+            aip = (year + "").substr(2, 2) / 1; //convert to string through coersion
+            m = nepali_years_and_days_in_months[aip];
+
+            //array index start from 0
+            for (let i = month - 1; i >= 1; i--) {
+                del_days += m[i];
             }
+            del_days += day - 1;
+            for (let i = aip - 1; i > 0; i--) {
+                m = nepali_years_and_days_in_months[i];
+                for (let j = 1; j < 13; j++) {
+                    del_days += m[j];
+                }
+            }
+
+            // after paush 17, 102 days are remained
+            del_days += 102;
+            del_days -= 29;
+
+            initial_date.setDate(initial_date.getDate() + del_days);
+            console.log(initial_date)
+            return [initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDay];
         }
-
-        // after paush 17, 102 days are remained
-        del_days += 102;
-        del_days -= 29;
-
-        initial_date.setDate(initial_date.getDate() + del_days);
-        console.log(initial_date)
-        return [initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDay];
+        throw new Error(`Date is out of bounds`);
     }
 }

@@ -3,6 +3,11 @@
     "description": "convert A.D to B.S and B.S to A.D",
     "version": "1.0",
     "manifest_version":3,
+    "permissions": [
+        "contextMenus",
+        "scripting",
+        "activeTab"
+    ],
     "background": {
         "service_worker":"background.js"
     },

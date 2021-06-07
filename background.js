@@ -1,5 +1,5 @@
 try {
-    importScripts('converter.js')
+    importScripts("converter.js");
 } catch (e) {
-    console.log(e);
+    console.error(e);
 }
