@@ -120,7 +120,7 @@ function getNumberEquivalentInNepali(num) {
 
 function getTodayDate() {
     let date = new Date();
-    let c = convertToBS(date.getFullYear(), date.getMonth(), date.getDate());
+    let c = convertToBS(date.getFullYear(), date.getMonth() + 1, date.getDate());
     return BSinEnglish(...c);
 }
 
@@ -159,13 +159,13 @@ function convertToBS(year, month, day) {
         let english_year = 1944;
         let english_month = 1;
         let english_day = 1;
-        let initial_date = Date.UTC(1944, 1, 1);
-        let date_given = Date.UTC(year, month, day);
+        let initial_date = new Date(1944, 0, 1);
+        let date_given = new Date(year, month - 1, day);
 
-        // var del_milliseconds = date_given.getTime() - initial_date.getTime();
-        // var days = del_milliseconds / (86400 * 1000);
-        let days = Math.abs(initial_date - date_given) / (86400 * 1000);
-
+        var del_milliseconds = date_given.getTime() - initial_date.getTime();
+        var days = Math.round(del_milliseconds / (86400 * 1000));
+        // let days = Math.abs(initial_date - date_given) / (86400 * 1000);
+        console.log(days);
         let nepali_year = 2000;
         let nepali_month = 9;
         let nepali_day = 17;
@@ -263,11 +263,11 @@ function convertToAD(year, month, day) {
     throw new Error(`Date is out of bounds`);
 }
 
+
 console.log(getTodayDate());
-console.log(convertToAD(2078, 03, 25));
-console.log(convertToBS(2021, 07, 09));
-console.log(convertToBS(2021, 08, 09));
-console.log(convertToBS(2023, 06, 09));
+
+
+
 
 
 
