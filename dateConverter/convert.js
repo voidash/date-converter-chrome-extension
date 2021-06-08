@@ -120,12 +120,9 @@ function getNumberEquivalentInNepali(num) {
 
 function getTodayDate() {
     let date = new Date();
-    console.log(date);
-    let c = convertToBS(date.getFullYear(), 06, 07);
-    console.log(c);
+    let c = convertToBS(date.getFullYear(), date.getMonth(), date.getDate());
     return BSinEnglish(...c);
 }
-console.log(getTodayDate());
 
 function BSinNepali(year, month, day) {
     year = year + "";
@@ -216,52 +213,61 @@ function convertToBS(year, month, day) {
 
         return [yearIterator / 1, monthIterator, dayIterator];
     }
-
-
-    function convertToAD(year, month, day) {
-        // known data is that . january 1 1944 is 2000 paush 17
-
-        let english_year = 1944;
-        let english_month = 1;
-        let english_day = 1;
-        let initial_date = new Date(1944, 1, 1);
-
-        let nepali_year = 2000;
-        let nepali_month = 9;
-        let nepali_day = 17;
-
-        //check if date falls inside our array data.
-        if (checkDateBoundsForBS(year, month, day)) {
-            return calculate();
-        }
-
-        function calculate() {
-            //get to the initial position of 2000/paush/17
-            del_days = 0;
-            //array index position
-            aip = (year + "").substr(2, 2) / 1; //convert to string through coersion
-            m = nepali_years_and_days_in_months[aip];
-
-            //array index start from 0
-            for (let i = month - 1; i >= 1; i--) {
-                del_days += m[i];
-            }
-            del_days += day - 1;
-            for (let i = aip - 1; i > 0; i--) {
-                m = nepali_years_and_days_in_months[i];
-                for (let j = 1; j < 13; j++) {
-                    del_days += m[j];
-                }
-            }
-
-            // after paush 17, 102 days are remained
-            del_days += 102;
-            del_days -= 29;
-
-            initial_date.setDate(initial_date.getDate() + del_days);
-            console.log(initial_date)
-            return [initial_date.getFullYear(), initial_date.getMonth(), initial_date.getDay];
-        }
-        throw new Error(`Date is out of bounds`);
-    }
+    return [0, 0, 0];
 }
+
+
+function convertToAD(year, month, day) {
+    // known data is that . january 1 1944 is 2000 paush 17
+
+    let english_year = 1944;
+    let english_month = 1;
+    let english_day = 1;
+    let initial_date = new Date(1944, 1, 1);
+
+    let nepali_year = 2000;
+    let nepali_month = 9;
+    let nepali_day = 17;
+
+    //check if date falls inside our array data.
+    if (checkDateBoundsForBS(year, month, day)) {
+        return calculate();
+    }
+
+    function calculate() {
+        //get to the initial position of 2000/paush/17
+        del_days = 0;
+        //array index position
+        aip = (year + "").substr(2, 2) / 1; //convert to string through coersion
+        m = nepali_years_and_days_in_months[aip];
+
+        //array index start from 0
+        for (let i = month - 1; i >= 1; i--) {
+            del_days += m[i];
+        }
+        del_days += day - 1;
+        for (let i = aip - 1; i > 0; i--) {
+            m = nepali_years_and_days_in_months[i];
+            for (let j = 1; j < 13; j++) {
+                del_days += m[j];
+            }
+        }
+
+        // after paush 17, 102 days are remained
+        del_days += 102;
+        del_days -= 30;
+
+        initial_date.setDate(initial_date.getDate() + del_days);
+        return [initial_date.getFullYear(), initial_date.getMonth() + 1, initial_date.getDate()];
+    }
+    throw new Error(`Date is out of bounds`);
+}
+
+console.log(getTodayDate());
+console.log(convertToAD(2078, 03, 25));
+console.log(convertToBS(2021, 07, 09));
+console.log(convertToBS(2021, 08, 09));
+console.log(convertToBS(2023, 06, 09));
+
+
+
