@@ -103,6 +103,32 @@ const nepali_years_and_days_in_months = [
 ];
 
 
+function convertNepaliMonthsToEnglishForMoment(date) {
+    date = date.toLowerCase();
+    let monthsInNepali = "baisakh_jestha_aashadha_shrawan_bhadra_aswin_kartik_mangsir_paush_magh_falgun_chaitra".split("_");
+    let monthInDevanagari = ['बैशाख', 'जेठ', 'असार', 'साउन', 'भाद्र', 'आश्विन', 'कार्तिक', 'मंसिर', 'पौष', 'माघ', 'फाल्गुण', 'चैत्र'];
+    let equivalentEnglishMonths = "Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split('_');
+    let devanagariNumbers = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+
+    let replaceWithEngMonths = (data, index) => {
+        if (date.includes(data)) {
+            console.log(data);
+            date = date.replace(data, equivalentEnglishMonths[index]);
+            console.log(date);
+        }
+    };
+
+    monthsInNepali.forEach(replaceWithEngMonths)
+    monthInDevanagari.forEach(replaceWithEngMonths);
+
+    devanagariNumbers.forEach((data, index) => {
+        date = date.replace(data, index);
+    })
+    return date;
+
+}
+
+
 function getMonthInNepali(monthIndex) {
     let month = ['बैशाख', 'जेठ', 'असार', 'श्रावण', 'भाद्र', 'आश्विन', 'कार्तिक', 'मंसिर', 'पौष', 'माघ', 'फाल्गुण', 'चैत्र'];
     return month[monthIndex - 1];
